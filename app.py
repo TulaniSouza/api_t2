@@ -1,17 +1,11 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 import sqlite3
 
 app = Flask(__name__)
 
-@app.route("/pague")
-def exiba_mensagem():
-    return "<h2>pagar as people!</h2>"
-
-# #se o app.py for o arquivo principal da API:
-# #EXECUTE O APP.RUN COM O MODO DE DEBUG ATIVADO
-
 
 def init_db():
+
     with sqlite3.connect("database.db") as conn:
         conn.execute("""
             CREATE TABLE IF NOT EXISTS LIVROS(
@@ -19,18 +13,58 @@ def init_db():
                 titulo TEXT NOT NULL,
                 categoria TEXT NOT NULL,
                 autor TEXT NO NULL,
-                imagem_url TEXT NOT NULL      
+                image_url TEXT NOT NULL      
             )
 """)
 
 
 init_db()
-@app.route("/doar", methods=["POST"])
 
+
+
+# #se o app.py for o arquivo principal da API:
+# #EXECUTE O APP.RUN COM O MODO DE DEBUG ATIVADO
+@app.route("/doar", methods=["POST"])
 def doar():
     dados = request.get_json()
-    
+    titulo = dados.get("titulo")
+    categoria = dados.get("categoria")
+    autor = dados.get("autor")
 
-if __name__=="__main__":
+    image_url = dados.get("image_url")
+
+    if not titulo or not categoria or not autor or not image_url:
+        return jsonify({"erro": "Todos os campos são obrigatórios"}), 400
+
+    with sqlite3.connect("database.db") as conn:
+        conn.execute(f"""
+                 INSERT INTO LIVROS (titulo, categoria, autor, image_url)
+                 VALUES ("{titulo}","{categoria}", "{autor}", "{image_url}")
+                  """)
+        conn.commit()
+        return jsonify({"mensagem": "Livro cadastrado com sucesso"}), 201
+
+
+@app.route("/doar", methods=["GET"])
+def livros_doados(): 
+    with sqlite3.connect("database.db") as conn:
+        livros = conn.execute("SELECT * FROM LIVROS").fetchall()
+        print(livros)
+
+        livros_formatados=[]
+
+        for item in livros:
+            dicionarios_livros={
+                "id": item [0],
+                "titulo": item [1],
+                "categoria": item [2],
+                "autor": item [3],
+                "image_url": item [4]
+            }
+        livros_formatados.append(dicionarios_livros)
+
+    return jsonify(livros_formatados), 200
+
+
+if __name__ == "__main__":
     app.run(debug=True)
-    
