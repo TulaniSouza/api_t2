@@ -46,7 +46,7 @@ def doar():
         return jsonify({"mensagem": "Livro cadastrado com sucesso"}), 201
 
 
-@app.route("/doar", methods=["GET"])
+@app.route("/livros", methods=["GET"])
 def livros_doados(): 
     with sqlite3.connect("database.db") as conn:
         livros = conn.execute("SELECT * FROM LIVROS").fetchall()
