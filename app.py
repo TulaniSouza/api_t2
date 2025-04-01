@@ -13,7 +13,7 @@ def init_db():
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 titulo TEXT NOT NULL,
                 categoria TEXT NOT NULL,
-                autor TEXT NO NULL,
+                autor TEXT NOT NULL,
                 image_url TEXT NOT NULL      
             )
 """)
@@ -62,6 +62,7 @@ def livros_doados():
                 "autor": item [3],
                 "image_url": item [4]
             }
+            
         livros_formatados.append(dicionarios_livros)
 
     return jsonify(livros_formatados), 200
