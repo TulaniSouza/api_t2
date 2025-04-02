@@ -31,7 +31,6 @@ def doar():
     titulo = dados.get("titulo")
     categoria = dados.get("categoria")
     autor = dados.get("autor")
-
     image_url = dados.get("image_url")
 
     if not titulo or not categoria or not autor or not image_url:
