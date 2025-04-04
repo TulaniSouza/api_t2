@@ -62,7 +62,7 @@ def livros_doados():
                 "image_url": item [4]
             }
             
-        livros_formatados.append(dicionarios_livros)
+    livros_formatados.append(dicionarios_livros)
 
     return jsonify(livros_formatados), 200
 
