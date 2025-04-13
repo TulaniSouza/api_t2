@@ -5,6 +5,11 @@ app = Flask(__name__)
 CORS(app)
 
 
+@app.route("/")
+def boas_vindas():
+    return "<h2> Sejam Bem-vindos a API de livros</h2>"
+
+
 def init_db():
 
     with sqlite3.connect("database.db") as conn:
